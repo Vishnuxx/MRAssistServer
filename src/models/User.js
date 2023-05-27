@@ -1,9 +1,8 @@
-const { AUTH } = require("../config/firebase")
 
 
 
 function User() {
-    this.signup = async (email , password) => {
+    this.signup = async ({AUTH},{email , password}) => {
        const user = await AUTH.createUser({
         email: email,
         password: password
@@ -13,7 +12,7 @@ function User() {
     }
 
 
-    this.forgotPassword = async (email) => {
+    this.forgotPassword = async (AUTH , {email}) => {
        const link =  AUTH.generatePasswordResetLink(email);
        return link;
     }
