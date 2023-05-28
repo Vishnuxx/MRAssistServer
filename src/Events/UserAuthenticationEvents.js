@@ -18,4 +18,8 @@ module.exports.userAuthenticationEvents = (events) => {
   events.on("user-delete-success", (res) => {
     console.log("user-delete-success", res);
   });
+
+  events.on("user-signup-complete", (res) => {
+    console.log("user-signup-complete", res);
+  });
 };

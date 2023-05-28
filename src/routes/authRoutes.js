@@ -1,3 +1,4 @@
+const { APPEVENTS } = require("../config/appEvents");
 const { env } = require("../config/envs");
 const { signUp } = require("../controllers/AuthController");
 const { createProfile } = require("../middlewares/createProfile");
@@ -11,7 +12,7 @@ const router = express.Router();
 //signup
 router.post(env.SERVER_ROUTE_SIGNUP, validateSignup, createUser , createProfile , getProfile, (req , res)=>{
     const profile = res.locals.profile;
-    console.log("profile" , profile)
+    APPEVENTS.emit("user-signup-complete");
     res.status(200).json(profile)
 });
 
