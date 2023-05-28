@@ -9,6 +9,7 @@ const { authRoute } = require("./src/routes/authRoutes");
 const { userAuthenticationEvents } = require("./src/Events/UserAuthenticationEvents");
 const { setupAppEvents, APPEVENTS } = require("./src/config/appEvents");
 const { userProfileEvents } = require("./src/Events/UserprofileEvents");
+const { userRoute } = require("./src/routes/userRoutes");
 
 server.use(cookieparser());
 // server.use(csrfMiddleware);
@@ -30,4 +31,4 @@ server.get("/", (req, res) => {
 
 
 server.use(authRoute)
-
+server.use(userRoute)
