@@ -9,9 +9,10 @@ const signUp = async (req, res) => {
   const transactions = { authenticated: false, createdProfile: false };
 
   const { username, email, body, password } = req.body;
+  let user, profile;
   try {
     //signup firebase
-    const user = await User.signup(
+    user = await User.signup(
       { AUTH: AUTH },
       {
         email: email,
@@ -24,7 +25,7 @@ const signUp = async (req, res) => {
     APPEVENTS.emit("email-authentication-success", user);
 
     //create user profile
-    const profile = await UserProfile.createUserProfile(
+    profile = await UserProfile.createUserProfile(
       {
         DB: DB,
         profileEndpointPath: env.FIREBASE_DB_ENDPOINT_PROFILES,
@@ -37,21 +38,37 @@ const signUp = async (req, res) => {
 
     transactions.createdProfile = true;
 
+    APPEVENTS.emit("email-authentication-success");
+
     //send success
     return res.status(200).json({
       userrecord: user,
       profiledata: profile,
     });
   } catch (error) {
-    APPEVENTS.emit("email-authentication-failed", user);
 
+   
+    if(!transactions.authenticated) {
+        APPEVENTS.emit("email-authentication-failed" , error);
+    }
+    if(!transactions.createdProfile) {
+        APPEVENTS.emit("email-authentication-failed" , error);
+    }
+    
+
+    //delete user
+    if (user && !profile) {
+      User.deleteUser( {AUTH} , {uid : user.uid});
+      APPEVENTS.emit("user-delete-success");
+    }
+
+    //send error
     return res.status(400).json({
-        error: error,
-      });
+      error: error,
+    });
   }
-  
-  
-
 };
+
+
 
 module.exports = { signUp };

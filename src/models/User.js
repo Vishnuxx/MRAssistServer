@@ -1,6 +1,7 @@
 
 
 
+
 function User() {
     this.signup = async ({AUTH},{email , password}) => {
        const user = await AUTH.createUser({
@@ -11,6 +12,9 @@ function User() {
        return user;
     }
 
+    this.deleteUser = async ({AUTH}, {uid}) => {
+        return await AUTH.deleteUser(uid)
+    }
 
     this.forgotPassword = async (AUTH , {email}) => {
        const link =  AUTH.generatePasswordResetLink(email);

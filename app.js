@@ -8,6 +8,7 @@ const { env } = require("./src/config/envs");
 const { authRoute } = require("./src/routes/authRoutes");
 const { userAuthenticationEvents } = require("./src/Events/UserAuthenticationEvents");
 const { setupAppEvents, APPEVENTS } = require("./src/config/appEvents");
+const { userProfileEvents } = require("./src/Events/UserprofileEvents");
 
 server.use(cookieparser());
 // server.use(csrfMiddleware);
@@ -20,6 +21,7 @@ server.use(cookieparser());
 server.use(cors())
 
 userAuthenticationEvents(APPEVENTS)
+userProfileEvents(APPEVENTS)
 
 server.get("/", (req, res) => {
   res.send("test");
