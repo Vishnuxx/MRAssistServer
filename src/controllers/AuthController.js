@@ -31,6 +31,7 @@ const signUp = async (req, res) => {
         profileEndpointPath: env.FIREBASE_DB_ENDPOINT_PROFILES,
       },
       {
+        uid: user.uid,
         username: username,
         email: email,
       }
