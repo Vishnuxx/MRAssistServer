@@ -3,12 +3,13 @@ const { env } = require("../config/envs");
 const { AUTH, DB } = require("../config/firebase");
 const { User } = require("../models/User");
 const { UserProfile } = require("../models/UserProfile");
+const { APPEVENTS } = require("../config/appEvents");
 
 const signUp = async (req, res) => {
-  const steps = {authenticated: false , createdProfile: false}
-  try {
-    const { username, email, body , password} = req.body;
+  const transactions = { authenticated: false, createdProfile: false };
 
+  const { username, email, body, password } = req.body;
+  try {
     //signup firebase
     const user = await User.signup(
       { AUTH: AUTH },
@@ -18,36 +19,39 @@ const signUp = async (req, res) => {
       }
     );
 
-    steps.authenticated = true;
+    transactions.authenticated = true;
+
+    APPEVENTS.emit("email-authentication-success", user);
 
     //create user profile
-    const profile = await UserProfile.createUserProfile({
-      DB: DB,
-      profileEndpointPath: env.FIREBASE_DB_ENDPOINT_PROFILES,
-    },
-    {
+    const profile = await UserProfile.createUserProfile(
+      {
+        DB: DB,
+        profileEndpointPath: env.FIREBASE_DB_ENDPOINT_PROFILES,
+      },
+      {
         username: username,
-        email: email
-    });
+        email: email,
+      }
+    );
 
-    steps.createdProfile = true
+    transactions.createdProfile = true;
 
     //send success
     return res.status(200).json({
       userrecord: user,
-      profiledata: profiledata,
+      profiledata: profile,
     });
   } catch (error) {
-    //send error
-    
+    APPEVENTS.emit("email-authentication-failed", user);
+
     return res.status(400).json({
-        error : "error"
-    });
+        error: error,
+      });
   }
+  
+  
+
 };
-
-
-
-
 
 module.exports = { signUp };
