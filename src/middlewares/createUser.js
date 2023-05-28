@@ -15,7 +15,7 @@ module.exports.createUser = async (req, res, next) => {
 
     console.log(user)
 
-    res.locals.user = user;
+    res.locals.uid = user.uid;
     APPEVENTS.emit("email-authentication-success");
     next()
   } catch (error) {

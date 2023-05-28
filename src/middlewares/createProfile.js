@@ -5,11 +5,11 @@ const { UserProfile } = require("../models/UserProfile");
 module.exports.createProfile = async (req, res, next) => {
   let user;
   try {
-    user = res.locals.user
+    uid = res.locals.uid
     const { username, email, body, password } = req.body;
 
     const profile = await UserProfile.createUserProfile({
-       uid: user.uid,
+       uid: uid,
        username: username,
        email: email,
      });
@@ -19,7 +19,7 @@ module.exports.createProfile = async (req, res, next) => {
     next();
   } catch (error) {
     if(user) {
-        User.deleteUser({uid : user.uid})
+        User.deleteUser({uid : uid})
     }
     APPEVENTS.emit("user-profile-create-failed");
     //send error

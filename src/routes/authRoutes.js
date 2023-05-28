@@ -1,6 +1,6 @@
 const { APPEVENTS } = require("../config/appEvents");
 const { env } = require("../config/envs");
-const { signUp } = require("../controllers/AuthController");
+
 const { createProfile } = require("../middlewares/createProfile");
 const { createUser } = require("../middlewares/createUser");
 const { getProfile } = require("../middlewares/getProfile");

@@ -5,7 +5,7 @@ const { AUTH, DB } = require("../config/firebase")
 
 module.exports.getProfile = async (req, res, next) => {
    try {
-     const uid = res.locals.user.uid;
+     const uid = res.locals.uid;
      const document = await DB.collection(env.FIREBASE_DB_ENDPOINT_PROFILES).doc(uid).get();
      if(document.exists) {
         res.locals.profile = document.data();

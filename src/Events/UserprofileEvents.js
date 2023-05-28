@@ -18,6 +18,9 @@ module.exports.userProfileEvents = (events) => {
   events.on("user-profile-doesnt-exist", (res) => {
     console.log("user-profile-doesnt-exist", res);
   });
+
+  events.on("user-profile-fetch-complete", (res) => {
+    console.log("user-profile-fetch-complete", res);
+  });
 };
 
-;

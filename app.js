@@ -10,6 +10,7 @@ const { userAuthenticationEvents } = require("./src/Events/UserAuthenticationEve
 const { setupAppEvents, APPEVENTS } = require("./src/config/appEvents");
 const { userProfileEvents } = require("./src/Events/UserprofileEvents");
 const { userRoute } = require("./src/routes/userRoutes");
+const { validationEvents } = require("./src/Events/ValidationEvents");
 
 server.use(cookieparser());
 // server.use(csrfMiddleware);
@@ -21,8 +22,10 @@ server.use(cookieparser());
 
 server.use(cors())
 
+//App Event Listeners
 userAuthenticationEvents(APPEVENTS)
 userProfileEvents(APPEVENTS)
+validationEvents(APPEVENTS)
 
 server.get("/", (req, res) => {
   res.send("test");
