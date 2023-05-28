@@ -5,9 +5,9 @@ const { User } = require("../models/User");
 const { UserProfile } = require("../models/UserProfile");
 
 const signUp = async (req, res) => {
-  
+  const steps = {authenticated: false , createdProfile: false}
   try {
-    const { username, email, body } = req.body;
+    const { username, email, body , password} = req.body;
 
     //signup firebase
     const user = await User.signup(
@@ -18,11 +18,19 @@ const signUp = async (req, res) => {
       }
     );
 
+    steps.authenticated = true;
+
     //create user profile
     const profile = await UserProfile.createUserProfile({
       DB: DB,
       profileEndpointPath: env.FIREBASE_DB_ENDPOINT_PROFILES,
+    },
+    {
+        username: username,
+        email: email
     });
+
+    steps.createdProfile = true
 
     //send success
     return res.status(200).json({
@@ -31,7 +39,10 @@ const signUp = async (req, res) => {
     });
   } catch (error) {
     //send error
-    return res.status(400).json({ errors: errors.array() });
+    
+    return res.status(400).json({
+        error : "error"
+    });
   }
 };
 
