@@ -4,8 +4,9 @@ const router = express.Router();
 
 const { verifyToken } = require("../middlewares/verifyToken");
 const { env } = require("../config/envs");
-const { getProfile } = require("../middlewares/getProfile");
+
 const { APPEVENTS } = require("../config/appEvents");
+const { getProfile } = require("../controllers/getProfile");
 
 //get profile
 router.get(
